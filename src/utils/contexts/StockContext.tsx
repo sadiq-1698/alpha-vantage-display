@@ -5,7 +5,7 @@ const StockDispatchContext: React.Context<any> = createContext(undefined);
 
 function UserProvider({ children }: { children: React.ReactNode }) {
   const [stockDetails, setUserDetails] = useState({
-    username: "John Doe"
+    functiom: "TIME_SERIES_INTRADAY"
   });
 
   return (
