@@ -3,7 +3,11 @@ import Modal from "./modal";
 import useModal from "../utils/hooks/useModal";
 import { useDebounce } from "../utils/hooks/useDebounce";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { ReactComponent as SearchSvg } from '../utils/assets/search.svg';
 import { StockContext, StockDispatchContext } from "../utils/contexts/StockContext";
+
+// "RIBXT3XYLI69PC0Q"
+// "R8I50P3LP1SJXA02"
 
 const SymbolSelector = () => {
   const { toggleModal, closeModal, isOpen } = useModal();
@@ -38,19 +42,22 @@ const SymbolSelector = () => {
     if (searchQuery || searchQuery.length < 0) searchCharacter();
     async function searchCharacter() {
       setFetching(true);
-      // const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}?function=SYMBOL_SEARCH&keywords=${searchQuery}&apikey=${process.env.REACT_APP_API_KEY}`)
-      const response = await axios.get("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo")
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}?function=SYMBOL_SEARCH&keywords=${searchQuery}&apikey=${process.env.REACT_APP_API_KEY}`)
+      // const response = await axios.get("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo")
       setFetching(false);
-      setSearchResults([...response.data.bestMatches])
+      if (response.data && response.data.bestMatches) {
+        setSearchResults([...response.data.bestMatches])
+      }
     }
   }, [searchQuery])
 
   return (
     <>
-      <div onClick={toggleModal} className="cursor-pointer">
-        <span className="font-bold text-sm pr-3 py-2 hover:bg-gray-100">
+      <div onClick={toggleModal} className="cursor-pointer flex items-center gap-2 hover:bg-gray-100 pr-3">
+        <span className="font-bold text-sm py-2">
           {dataQuery.symbol}
         </span>
+        <SearchSvg />
       </div>
 
       {
