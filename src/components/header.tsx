@@ -3,8 +3,8 @@ import SymbolSelector from './symbol-selector';
 import SelectorDivider from './selector-divider';
 import IntervalSelector from './interval-selector';
 import FunctionSelector from './function-selector';
-import { StockContext } from '../utils/contexts/StockContext';
 import { TIME_SERIES_INTRADAY } from '../utils/constants';
+import { StockContext } from '../utils/contexts/StockContext';
 
 function Header() {
   const { dataQuery } = useContext(StockContext);

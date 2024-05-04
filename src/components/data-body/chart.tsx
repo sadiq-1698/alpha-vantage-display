@@ -51,7 +51,7 @@ const Chart = () => {
   const { chartData, dataQuery, chartLoading } = useContext(StockContext);
 
   return (
-    <div className='h-[90%] pt-6'>
+    <div className='h-[90%] w-[70%] pt-6'>
       {
         chartLoading ?
           (

@@ -5,13 +5,17 @@ import React, { createContext, Dispatch, SetStateAction, useEffect, useState } f
 type ContextType = {
   chartData: any,
   chartLoading: boolean,
+  lastTradedLoading: boolean,
   dataQuery: Record<string, string>,
+  lastTradedData: Record<string, string> | null,
 }
 
 type DispatchContextType = {
   setChartData: Dispatch<SetStateAction<any>>;
   setChartLoading: Dispatch<SetStateAction<boolean>>;
+  setLastTradedLoading: Dispatch<SetStateAction<boolean>>;
   setDataQuery: Dispatch<SetStateAction<Record<string, string>>>;
+  setLastTradedData: Dispatch<SetStateAction<Record<string, string> | null>>,
 };
 
 const StockContext: React.Context<ContextType> = createContext(undefined as any);
@@ -25,6 +29,8 @@ function StockDataProvider({ children }: { children: React.ReactNode }) {
   });
   const [chartData, setChartData] = useState<any>(null);
   const [chartLoading, setChartLoading] = useState<boolean>(false);
+  const [lastTradedLoading, setLastTradedLoading] = useState<boolean>(false);
+  const [lastTradedData, setLastTradedData] = useState<Record<string, string> | null>(null);
 
   useEffect(() => {
     const modifyUrl = () => {
@@ -49,16 +55,31 @@ function StockDataProvider({ children }: { children: React.ReactNode }) {
     getStockData();
   }, [dataQuery.interval, dataQuery.function, dataQuery.symbol]);
 
+  useEffect(() => {
+    const fetchLastTradedData = async () => {
+      setLastTradedLoading(true);
+      const response = await axios.get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=demo");
+      setLastTradedData(response.data["Global Quote"]);
+      setLastTradedLoading(false);
+    }
+
+    fetchLastTradedData();
+  }, [dataQuery.symbol])
+
   const contextValues = {
     dataQuery,
     chartData,
-    chartLoading
+    chartLoading,
+    lastTradedData,
+    lastTradedLoading
   }
 
   const contextSetterValues = {
     setDataQuery,
     setChartData,
-    setChartLoading
+    setChartLoading,
+    setLastTradedData,
+    setLastTradedLoading
   }
 
   return (
