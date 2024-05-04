@@ -7,8 +7,8 @@ import { StockContext, StockDispatchContext } from "../utils/contexts/StockConte
 
 const SymbolSelector = () => {
   const { toggleModal, closeModal, isOpen } = useModal();
-  const stockDataObj = useContext(StockContext);
-  const setStockDataObj = useContext(StockDispatchContext);
+  const { dataQuery } = useContext(StockContext);
+  const { setDataQuery } = useContext(StockDispatchContext);
 
   const [searchVal, setSearchVal] = useState('');
   const [fetching, setFetching] = useState(false);
@@ -27,7 +27,7 @@ const SymbolSelector = () => {
   }
 
   const handleSymbolSelect = (symbol: string) => {
-    setStockDataObj(prev => ({
+    setDataQuery(prev => ({
       ...prev,
       symbol: symbol
     }))
@@ -49,7 +49,7 @@ const SymbolSelector = () => {
     <>
       <div onClick={toggleModal} className="cursor-pointer">
         <span className="font-bold text-sm pr-3 py-2 hover:bg-gray-100">
-          {stockDataObj.symbol}
+          {dataQuery.symbol}
         </span>
       </div>
 
@@ -89,7 +89,7 @@ const SymbolSelector = () => {
                           onClick={() => handleSymbolSelect(symbol["1. symbol"])}
                           className="py-2 px-1 w-full border-b border-solid border-gray-200 flex justify-between items-center bg-white hover:bg-gray-100 cursor-pointer"
                         >
-                          <div className="flex flex-col items-start">
+                          <div className="flex flex-col items-start flex-1">
                             <p>
                               {symbol["2. name"]}
                             </p>
@@ -98,7 +98,7 @@ const SymbolSelector = () => {
                             </p>
                           </div>
 
-                          <div className="flex flex-col items-end">
+                          <div className="flex flex-col items-end flex-1">
                             <p>{symbol["4. region"]}</p>
                             <p className="text-sm text-gray-500">
                               {symbol["3. type"]}

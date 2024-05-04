@@ -1,33 +1,69 @@
 import axios from "axios";
-import { PARAM_FUNCTION } from "../constants";
+import { PARAM_FUNCTION, TIME_SERIES_INTRADAY } from "../constants";
 import React, { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
 
-const StockContext: React.Context<Record<string, string>> = createContext({});
-const StockDispatchContext: React.Context<Dispatch<SetStateAction<Record<string, string>>>> = createContext(undefined as any);
+type ContextType = {
+  chartData: any,
+  chartLoading: boolean,
+  dataQuery: Record<string, string>,
+}
+
+type DispatchContextType = {
+  setChartData: Dispatch<SetStateAction<any>>;
+  setChartLoading: Dispatch<SetStateAction<boolean>>;
+  setDataQuery: Dispatch<SetStateAction<Record<string, string>>>;
+};
+
+const StockContext: React.Context<ContextType> = createContext(undefined as any);
+const StockDispatchContext: React.Context<DispatchContextType> = createContext(undefined as any);
 
 function StockDataProvider({ children }: { children: React.ReactNode }) {
   const [dataQuery, setDataQuery] = useState<Record<string, string>>({
-    [PARAM_FUNCTION]: "TIME_SERIES_INTRADAY",
-    symbol: "IBM",
-    interval: "5min",
+    symbol: "IBM", // default symbol
+    interval: "5min", // default interval
+    [PARAM_FUNCTION]: "TIME_SERIES_INTRADAY", // default function
   });
+  const [chartData, setChartData] = useState<any>(null);
+  const [chartLoading, setChartLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const getStockData = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=${dataQuery.interval}&apikey=${process.env.REACT_APP_API_KEY}`);
+    const modifyUrl = () => {
+      if (dataQuery.function === TIME_SERIES_INTRADAY) {
+        return `function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min`
+        // return `function=TIME_SERIES_INTRADAY&symbol=${dataQuery.symbol}&interval=${dataQuery.interval}`
+      } else {
+        return `function=${dataQuery.function}&symbol=IBM`
+        // return `function=${dataQuery.function}&symbol=${dataQuery.symbol}`
+      }
+    }
 
-      console.log(response);
+    const getStockData = async () => {
+      setChartLoading(true);
+      const response = await axios.get(`https://www.alphavantage.co/query?${modifyUrl()}&apikey=demo`);
+      // const response = await axios.get(`https://www.alphavantage.co/query?${modifyUrl()}&apikey=${process.env.REACT_APP_API_KEY}`);
+
+      setChartData(response.data);
+      setChartLoading(false);
     }
 
     getStockData();
-  }, [dataQuery.interval]);
+  }, [dataQuery.interval, dataQuery.function, dataQuery.symbol]);
 
-  // console.log(dataQuery)
+  const contextValues = {
+    dataQuery,
+    chartData,
+    chartLoading
+  }
+
+  const contextSetterValues = {
+    setDataQuery,
+    setChartData,
+    setChartLoading
+  }
 
   return (
-    <StockContext.Provider value={dataQuery}>
-      <StockDispatchContext.Provider value={setDataQuery}>
+    <StockContext.Provider value={contextValues}>
+      <StockDispatchContext.Provider value={contextSetterValues}>
         {children}
       </StockDispatchContext.Provider>
     </StockContext.Provider>

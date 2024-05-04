@@ -4,13 +4,13 @@ import useComponentVisible from "../utils/hooks/useComponentVisible";
 import { StockContext, StockDispatchContext } from "../utils/contexts/StockContext";
 
 const IntervalSelector = () => {
-  const stockDataObj = useContext(StockContext);
-  const setStockDataObj = useContext(StockDispatchContext);
+  const { dataQuery } = useContext(StockContext);
+  const { setDataQuery } = useContext(StockDispatchContext);
 
   const { wrapRef, toggleChild, isComponentVisible } = useComponentVisible();
 
   const onIntervalSelect = (interval: string) => {
-    setStockDataObj((prev: Record<string, string>) => ({
+    setDataQuery((prev: Record<string, string>) => ({
       ...prev,
       interval: interval
     }))
@@ -19,7 +19,7 @@ const IntervalSelector = () => {
   return (
     <div className="relative cursor-pointer" ref={wrapRef} onClick={toggleChild}>
       <span className='font-semibold text-sm px-3 py-2 hover:bg-gray-100'>
-        {stockDataObj.interval}
+        {dataQuery.interval}
       </span>
       {
         isComponentVisible && (

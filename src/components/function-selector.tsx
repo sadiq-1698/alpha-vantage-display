@@ -4,13 +4,13 @@ import { PARAM_FUNCTION, TIME_SERIES_FUNCTIONS } from "../utils/constants";
 import { StockContext, StockDispatchContext } from "../utils/contexts/StockContext";
 
 const FunctionSelector = () => {
-  const stockDataObj = useContext(StockContext);
-  const setStockDataObj = useContext(StockDispatchContext);
+  const { dataQuery } = useContext(StockContext);
+  const { setDataQuery } = useContext(StockDispatchContext);
 
   const { wrapRef, toggleChild, isComponentVisible } = useComponentVisible();
 
   const onFunctionSelect = (func: string) => {
-    setStockDataObj((prev: Record<string, string>) => ({
+    setDataQuery((prev: Record<string, string>) => ({
       ...prev,
       [PARAM_FUNCTION]: func
     }))
@@ -19,7 +19,7 @@ const FunctionSelector = () => {
   return (
     <div className="relative cursor-pointer" ref={wrapRef} onClick={toggleChild}>
       <span className='font-semibold text-sm px-3 py-2 hover:bg-gray-100'>
-        {TIME_SERIES_FUNCTIONS.find(el => el.val === stockDataObj[PARAM_FUNCTION])?.label}
+        {TIME_SERIES_FUNCTIONS.find(el => el.val === dataQuery[PARAM_FUNCTION])?.label}
       </span>
 
       {
