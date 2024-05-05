@@ -11,7 +11,7 @@ const LatestStats = () => {
   const textClass = isNegativeChange ? "text-red-800" : "text-green-800"
 
   return (
-    <div className="p-10 h-full w-[30%] border-l-2 border-solid border-b-slate-700">
+    <div className="p-4 lg:p-10 lg:h-full w-full lg:w-[30%] lg:border-l-2 lg:border-solid lg:border-b-slate-700">
       {
         lastTradedLoading ? (
           <div className="h-full flex justify-center items-start">
