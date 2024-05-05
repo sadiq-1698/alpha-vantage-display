@@ -28,10 +28,28 @@
   color: #61dafb;
 }
 
+.apexcharts-tooltip {
+  background: #f3f3f3;
+  box-shadow: rgba(0, 0, 0, 0.25);
+}
+
+.apexcharts-yaxistooltip.apexcharts-active,
+.apexcharts-xaxistooltip.apexcharts-active {
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  border-radius: 6px;
+}
+
+.apexcharts-yaxistooltip-left:after,
+.apexcharts-yaxistooltip:after {
+  display: none;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

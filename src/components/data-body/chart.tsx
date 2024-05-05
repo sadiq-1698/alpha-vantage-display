@@ -24,7 +24,7 @@ const Chart = () => {
         (
           <>
 
-            <div className='h-[30%] absolute bottom-[2%] opacity-50 w-full pl-5'>
+            <div className='h-[30%] absolute bottom-[2%] opacity-40 w-full pl-5'>
               <ReactChart
                 type="bar"
                 height={"100%"}

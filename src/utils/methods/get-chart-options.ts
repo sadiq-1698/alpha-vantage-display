@@ -2,6 +2,7 @@ import { ApexOptions } from "apexcharts";
 import getMetaInfo from "./get-meta-info";
 import getSeriesKey from "./get-series-key";
 import modifyVolumeSeries from "./modify-volume-series";
+import toFixedIfNecessary from "./to-fixed-if-necessary";
 
 const getChartOptions = (
   chartData: any,
@@ -16,17 +17,81 @@ const getChartOptions = (
   const volumeSeries = modifyVolumeSeries(chartData, func as string, interval);
 
   return {
-    ...(type === "bar" && {
-      chart: {
-        type: type,
-        height: "100%",
-        toolbar: {
+    chart: {
+      type: type,
+      height: "100%",
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: false,
+      },
+      ...(type === "candlesticks" && {
+        id: "candles",
+      }),
+    },
+
+    xaxis: {
+      type: "datetime",
+      ...(type === "bar" && {
+        labels: {
           show: false,
         },
-        zoom: {
+        tooltip: {
           enabled: false,
         },
-      },
+        categories: currentTimeSeriesData
+          ? Object.keys(currentTimeSeriesData).map((el) =>
+              el.split(" ").length > 1 ? el.split(" ").join("T") : el
+            )
+          : [],
+      }),
+
+      ...(type === "candlestick" && {
+        tooltip: {
+          formatter: function (val) {
+            const date = new Date(val);
+            const day = date.getDate();
+            const month = date.toLocaleString("default", { month: "short" });
+            const year = date.getFullYear();
+            const formattedDate = day + " " + month + ", " + year;
+            return formattedDate;
+          },
+        },
+        labels: {
+          datetimeFormatter: {
+            year: "yyyy",
+            month: "MMM, yyyy",
+            day: "dd MMM, yyyy",
+            hour: "HH:mm",
+          },
+        },
+      }),
+    },
+
+    yaxis: {
+      ...(type === "bar" && {
+        labels: {
+          show: false,
+        },
+        tooltip: {
+          enabled: false,
+        },
+      }),
+      ...(type === "candlestick" && {
+        labels: {
+          show: true,
+          formatter: function (val) {
+            return val.toFixed(2);
+          },
+        },
+        tooltip: {
+          enabled: true,
+        },
+      }),
+    },
+
+    ...(type === "bar" && {
       colors:
         volumeSeries &&
         volumeSeries[0].actualData.map((el) =>
@@ -43,65 +108,6 @@ const getChartOptions = (
       },
       legend: {
         show: false,
-      },
-      xaxis: {
-        type: "datetime",
-        labels: {
-          show: false,
-        },
-        tooltip: {
-          enabled: false,
-        },
-        categories: currentTimeSeriesData
-          ? Object.keys(currentTimeSeriesData).map((el) =>
-              el.split(" ").length > 1 ? el.split(" ").join("T") : el
-            )
-          : [],
-      },
-      yaxis: {
-        labels: {
-          show: false,
-        },
-        tooltip: {
-          enabled: false,
-        },
-      },
-    }),
-
-    ...(type === "candlestick" && {
-      chart: {
-        type: type,
-        id: "candles",
-        height: "100%",
-        toolbar: {
-          show: false,
-        },
-        zoom: {
-          enabled: false,
-        },
-      },
-      title: {
-        text: getMetaInfo(chartData),
-        align: "left",
-      },
-      xaxis: {
-        type: "datetime",
-        labels: {
-          datetimeFormatter: {
-            year: "yyyy",
-            month: "MMM",
-            day: "dd",
-            hour: "HH:mm",
-          },
-        },
-      },
-      yaxis: {
-        labels: {
-          show: true,
-        },
-        tooltip: {
-          enabled: true,
-        },
       },
     }),
   } as ApexOptions;
