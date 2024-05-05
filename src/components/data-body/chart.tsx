@@ -6,7 +6,9 @@ import modifyTimeSeriesData from '../../utils/methods/modify-time-series-data';
 
 const getMetaInfo = (chartData: any) => {
   if (!chartData) return "";
-  // console.log(chartData)
+
+  if (chartData["Information"]) return "";
+
   return chartData["Meta Data"]["2. Symbol"] + " - " + chartData["Meta Data"]["1. Information"];
 }
 
@@ -50,23 +52,38 @@ const Chart = () => {
 
   const { chartData, dataQuery, chartLoading } = useContext(StockContext);
 
+  console.log(chartData);
+
   return (
     <div className='h-[90%] w-[70%] pt-6'>
       {
-        chartLoading ?
-          (
-            <div className='h-full flex justify-center items-center'>
-              Loading...
-            </div>
-          ) :
-          (
-            <ReactChart
-              height={"100%"}
-              type="candlestick"
-              options={getChartOptions(chartData)}
-              series={modifyTimeSeriesData(chartData, dataQuery.function, dataQuery.interval)}
-            />
-          )
+        chartLoading &&
+        (
+          <div className='h-full flex justify-center items-center'>
+            Loading...
+          </div>
+        )
+      }
+
+      {
+        !chartLoading && chartData && !chartData["Information"] &&
+        (
+          <ReactChart
+            height={"100%"}
+            type="candlestick"
+            options={getChartOptions(chartData)}
+            series={modifyTimeSeriesData(chartData, dataQuery.function, dataQuery.interval)}
+          />
+        )
+      }
+
+      {
+        !chartLoading && chartData && chartData["Information"] &&
+        (
+          <div className='h-full flex justify-center items-center'>
+            API limit reached!
+          </div>
+        )
       }
 
     </div>
