@@ -18,14 +18,29 @@ const getChartOptions = (
     chart: {
       type: type,
       height: "100%",
-      toolbar: {
-        show: false,
-      },
-      zoom: {
-        enabled: false,
-      },
+      ...(type === "bar" && {
+        toolbar: {
+          show: false,
+        },
+      }),
       ...(type === "candlesticks" && {
         id: "candles",
+        zoom: {
+          enabled: false,
+        },
+        toolbar: {
+          show: true,
+          tools: {
+            pan: true,
+            zoomin: true,
+            zoomout: true,
+            download: false,
+            reset: false,
+            zoom: false,
+            selection: false,
+          },
+        },
+        
       }),
     },
 
