@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../api/axios";
 import { PARAM_FUNCTION, TIME_SERIES_INTRADAY } from "../constants";
 import React, { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
 
@@ -35,18 +35,18 @@ function StockDataProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const modifyUrl = () => {
       if (dataQuery.function === TIME_SERIES_INTRADAY) {
-        // return `function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min`
-        return `function=TIME_SERIES_INTRADAY&symbol=${dataQuery.symbol}&interval=${dataQuery.interval}`
+        return `function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min`
+        // return `function=TIME_SERIES_INTRADAY&symbol=${dataQuery.symbol}&interval=${dataQuery.interval}`
       } else {
-        // return `function=${dataQuery.function}&symbol=IBM`
-        return `function=${dataQuery.function}&symbol=${dataQuery.symbol}`
+        return `function=${dataQuery.function}&symbol=IBM`
+        // return `function=${dataQuery.function}&symbol=${dataQuery.symbol}`
       }
     }
 
     const getStockData = async () => {
       setChartLoading(true);
-      // const response = await axios.get(`https://www.alphavantage.co/query?${modifyUrl()}&apikey=demo`);
-      const response = await axios.get(`https://www.alphavantage.co/query?${modifyUrl()}&apikey=${process.env.REACT_APP_API_KEY}`);
+      const response = await axios.get(`?${modifyUrl()}&apikey=demo`);
+      // const response = await axios.get(`?${modifyUrl()}&apikey=${process.env.REACT_APP_API_KEY}`);
 
       setChartData(response.data);
       setChartLoading(false);
@@ -58,7 +58,8 @@ function StockDataProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const fetchLastTradedData = async () => {
       setLastTradedLoading(true);
-      const response = await axios.get(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${dataQuery.symbol}&apikey=${process.env.REACT_APP_API_KEY}`);
+      const response = await axios.get(`?function=GLOBAL_QUOTE&symbol=${dataQuery.symbol}&apikey=demo`);
+      // const response = await axios.get(`?function=GLOBAL_QUOTE&symbol=${dataQuery.symbol}&apikey=${process.env.REACT_APP_API_KEY}`);
 
       if (response.data && response.data["Global Quote"]) {
         setLastTradedData(response.data["Global Quote"]);

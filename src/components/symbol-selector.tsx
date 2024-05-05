@@ -1,5 +1,5 @@
-import axios from "axios";
 import Modal from "./modal";
+import axios from "../api/axios";
 import useModal from "../utils/hooks/useModal";
 import { useDebounce } from "../utils/hooks/useDebounce";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
@@ -42,8 +42,8 @@ const SymbolSelector = () => {
     if (searchQuery || searchQuery.length < 0) searchCharacter();
     async function searchCharacter() {
       setFetching(true);
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}?function=SYMBOL_SEARCH&keywords=${searchQuery}&apikey=${process.env.REACT_APP_API_KEY}`)
-      // const response = await axios.get("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo")
+      // const response = await axios.get(`?function=SYMBOL_SEARCH&keywords=${searchQuery}&apikey=${process.env.REACT_APP_API_KEY}`)
+      const response = await axios.get("?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo")
       setFetching(false);
       if (response.data && response.data.bestMatches) {
         setSearchResults([...response.data.bestMatches])

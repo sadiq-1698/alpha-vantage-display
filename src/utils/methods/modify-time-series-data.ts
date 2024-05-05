@@ -8,8 +8,8 @@ const modifyTimeSeriesData = (
 ) => {
   if (!chartData) return;
 
-  const currentTimeSeriesKey = getSeriesKey(func, interval);
-  // const currentTimeSeriesKey = getSeriesKey(func, '5min');
+  // const currentTimeSeriesKey = getSeriesKey(func, interval);
+  const currentTimeSeriesKey = getSeriesKey(func, '5min');
   const currentTimeSeriesData = chartData[currentTimeSeriesKey];
 
   if (!currentTimeSeriesData)
