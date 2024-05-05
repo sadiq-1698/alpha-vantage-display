@@ -6,9 +6,6 @@ import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { ReactComponent as SearchSvg } from '../utils/assets/search.svg';
 import { StockContext, StockDispatchContext } from "../utils/contexts/StockContext";
 
-// "RIBXT3XYLI69PC0Q"
-// "R8I50P3LP1SJXA02"
-
 const SymbolSelector = () => {
   const { toggleModal, closeModal, isOpen } = useModal();
   const { dataQuery } = useContext(StockContext);
@@ -42,9 +39,11 @@ const SymbolSelector = () => {
     if (searchQuery || searchQuery.length < 0) searchCharacter();
     async function searchCharacter() {
       setFetching(true);
-      // const response = await axios.get(`?function=SYMBOL_SEARCH&keywords=${searchQuery}&apikey=${process.env.REACT_APP_API_KEY}`)
-      const response = await axios.get("?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo")
+      const response = await axios.get(`?function=SYMBOL_SEARCH&keywords=${searchQuery}&apikey=${process.env.REACT_APP_API_KEY}`)
+      // const response = await axios.get("?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo");
+      
       setFetching(false);
+      
       if (response.data && response.data.bestMatches) {
         setSearchResults([...response.data.bestMatches])
       }
