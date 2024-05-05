@@ -22,3 +22,9 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+## Available Features
+- Search for a symbol a.k.a matching stock names.
+- View the latest traded details associated to the selected symbol.
+- View `intraday`, `daily`, `weekly` and `monthly` charts along with volume data
+- Select intervals (`1min`, `5min`, `15min`, `30min` and `60min`) for intraday data.
