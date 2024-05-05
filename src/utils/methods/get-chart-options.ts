@@ -1,8 +1,6 @@
 import { ApexOptions } from "apexcharts";
-import getMetaInfo from "./get-meta-info";
 import getSeriesKey from "./get-series-key";
 import modifyVolumeSeries from "./modify-volume-series";
-import toFixedIfNecessary from "./to-fixed-if-necessary";
 
 const getChartOptions = (
   chartData: any,
