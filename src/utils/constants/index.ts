@@ -24,3 +24,6 @@ export const KEY_INTRADAY_TIME_SERIES = {
 export const KEY_DAILY_TIME_SERIES = "Time Series (Daily)";
 export const KEY_WEEKLY_TIME_SERIES = "Weekly Time Series";
 export const KEY_MONTHLY_TIME_SERIES = "Monthly Time Series";
+
+export const CHART_TYPE_CANDLE = "candlestick";
+export const CHART_TYPE_BAR = "bar";

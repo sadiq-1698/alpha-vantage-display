@@ -1,5 +1,5 @@
-function toFixedIfNecessary(value: number, dp: number) {
-  return +value.toFixed(dp);
+function toFixedIfNecessary(value: number, decimalPoints: number) {
+  return +value.toFixed(decimalPoints);
 }
 
 export default toFixedIfNecessary;
