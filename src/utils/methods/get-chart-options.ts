@@ -1,15 +1,16 @@
 import { ApexOptions } from "apexcharts";
 import getSeriesKey from "./get-series-key";
 import modifyVolumeSeries from "./modify-volume-series";
+import { CHART_TYPE_BAR, CHART_TYPE_CANDLE } from "../constants";
 
 const getChartOptions = (
   chartData: any,
-  type = "candlestick",
+  type = CHART_TYPE_CANDLE,
   func?: string,
   interval?: string
 ) => {
-  // const currentTimeSeriesKey = getSeriesKey(func, interval);
-  const currentTimeSeriesKey = getSeriesKey(func as string, "5min");
+  const currentTimeSeriesKey = getSeriesKey(func as string, interval);
+  // const currentTimeSeriesKey = getSeriesKey(func as string, "5min");
   const currentTimeSeriesData = chartData[currentTimeSeriesKey];
 
   const volumeSeries = modifyVolumeSeries(chartData, func as string, interval);
@@ -18,35 +19,37 @@ const getChartOptions = (
     chart: {
       type: type,
       height: "100%",
-      ...(type === "bar" && {
+
+      ...(type === CHART_TYPE_BAR && {
         toolbar: {
           show: false,
         },
       }),
-      ...(type === "candlesticks" && {
+
+      ...(type === CHART_TYPE_CANDLE && {
         id: "candles",
-        zoom: {
-          enabled: false,
-        },
         toolbar: {
           show: true,
+          autoSelected: "pan",
           tools: {
             pan: true,
+            zoom: false,
             zoomin: true,
+            reset: true,
             zoomout: true,
             download: false,
-            reset: false,
-            zoom: false,
             selection: false,
           },
         },
-        
+        selection: {
+          enabled: false,
+        },
       }),
     },
 
     xaxis: {
       type: "datetime",
-      ...(type === "bar" && {
+      ...(type === CHART_TYPE_BAR && {
         labels: {
           show: false,
         },
@@ -60,7 +63,7 @@ const getChartOptions = (
           : [],
       }),
 
-      ...(type === "candlestick" && {
+      ...(type === CHART_TYPE_CANDLE && {
         tooltip: {
           formatter: function (val) {
             const date = new Date(val);
@@ -83,7 +86,7 @@ const getChartOptions = (
     },
 
     yaxis: {
-      ...(type === "bar" && {
+      ...(type === CHART_TYPE_BAR && {
         labels: {
           show: false,
         },
@@ -91,7 +94,8 @@ const getChartOptions = (
           enabled: false,
         },
       }),
-      ...(type === "candlestick" && {
+
+      ...(type === CHART_TYPE_CANDLE && {
         labels: {
           show: true,
           formatter: function (val) {
@@ -104,7 +108,7 @@ const getChartOptions = (
       }),
     },
 
-    ...(type === "bar" && {
+    ...(type === CHART_TYPE_BAR && {
       colors:
         volumeSeries &&
         volumeSeries[0].actualData.map((el) =>
